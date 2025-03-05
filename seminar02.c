@@ -137,7 +137,7 @@ int main() {
 	afisare(m1);
 	dezalocare1(&vector, &nrElem);
 
-	//test
+	
 
 	return 0;
 }
