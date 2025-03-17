@@ -80,10 +80,10 @@ void dezalocareVectorMasini(Masina** vector, int* nrMasini) {
 	{
 		free((*vector)[i].model);
 		free((*vector)[i].numeSofer);
-		free(*vector);
-		*vector = NULL;
-		*nrMasini = 0;
 	}
+	free(*vector);
+	*vector = NULL;
+	*nrMasini = 0;
 }
 
 float pretMediuDupaNrUsi(Masina* vector, int nrMasini, int nrUsi)
@@ -109,7 +109,7 @@ int main() {
 	int nrMasini = 0;
 	masini = citireVectorMasiniFisier("masini.txt", &nrMasini);
 	afisareVectorMasini(masini, nrMasini);
-	float medie = pretMediuDupaNrUsi(masini, nrMasini, 6);
+	float medie = pretMediuDupaNrUsi(masini, nrMasini, 5);
 	printf("%.2f", medie);
 	dezalocareVectorMasini(&masini, &nrMasini);
 	return 0;
