@@ -151,25 +151,77 @@ float calculeazaPretMediu(Lista lista) {
 	return suma / cnt;
 }
 
-void stergeMasinaDupaID(/*lista masini*/ int id) {
+void stergeMasinaDupaID(Lista* lista, int id) {
 	//sterge masina cu id-ul primit.
 	//tratati situatia ca masina se afla si pe prima pozitie, si pe ultima pozitie
+	Nod* aux = lista->prim;
+	while (aux) {
+		if (aux->info.id == id)
+		{
+			if (aux->precedent)
+			{
+				aux->precedent->urmator = aux->urmator;
+			}
+			else
+			{
+				lista->prim = aux->urmator;
+			}
+
+			if (aux->urmator)
+			{
+				aux->urmator->precedent = aux->precedent;
+			}
+			else
+			{
+				lista->ultim = aux->precedent;
+			}
+
+			free(aux->info.model);
+			free(aux->info.numeSofer);
+			free(aux);
+			return 0;
+		}
+		aux = aux->urmator;
+
+	}
+
 }
 
-char* getNumeSoferMasinaScumpa(/*lista dublu inlantuita*/) {
+char* getNumeSoferMasinaScumpa(Lista lista) {
 	//cauta masina cea mai scumpa si 
 	//returneaza numele soferului acestei maasini.
-	return NULL;
+	float pretMax = 0;
+	char* numeSofer = NULL;
+	Nod* aux = lista.prim;
+	while (aux)
+	{
+		if (aux->info.pret > pretMax)
+		{
+			pretMax = aux->info.pret;
+			if (numeSofer)
+			{
+				free(numeSofer);
+			}
+			numeSofer = (char*)malloc(strlen(aux->info.numeSofer) + 1);
+			strcpy_s(numeSofer, strlen(aux->info.numeSofer) + 1, aux->info.numeSofer);
+		}
+		aux = aux->urmator;
+	}
+	return numeSofer;
 }
 
 int main() {
 
 	Lista list;
 	list = citireLDMasiniDinFisier("masini.txt");
-	afisareListaMasiniInceput(list);
-	float pretMediu = calculeazaPretMediu(list);
+	//afisareListaMasiniInceput(list);
+	//float pretMediu = calculeazaPretMediu(list);
 
-	printf("%f", pretMediu);
+	//printf("%f", pretMediu);
+	stergeMasinaDupaID(&list, 5);
+	afisareListaMasiniInceput(list);
+	printf("%s", getNumeSoferMasinaScumpa(list));
+
 	dezalocareLDMasini(&list);
 
 	return 0;
